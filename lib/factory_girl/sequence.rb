@@ -19,8 +19,16 @@ module FactoryGirl
       end
     end
 
-    def next
-      @proc ? @proc.call(@value.peek) : @value.peek
+    def next(scope = nil)
+      if @proc
+        if scope
+          scope.instance_exec(@value.peek, &@proc)
+        else
+          @proc.call(@value.peek)
+        end
+      else
+        @value.peek
+      end
     ensure
       @value.next
     end
