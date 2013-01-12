@@ -20,12 +20,10 @@ module FactoryGirl
     end
 
     def next(scope = nil)
-      if @proc
-        if scope
-          scope.instance_exec(@value.peek, &@proc)
-        else
-          @proc.call(@value.peek)
-        end
+      if scope && @proc
+        scope.instance_exec(@value.peek, &@proc)
+      elsif @proc
+        @proc.call(@value.peek)
       else
         @value.peek
       end
